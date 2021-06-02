@@ -316,6 +316,29 @@ namespace robotbit {
 
         MotorStopAll()
     }
+	
+	 //% blockId=robotbit_stepper_dual block_AJ="AJ Dual Stepper(Degree) |M1 %degree1| M2 %degree2"
+    //% weight=89
+    export function StepperDualAJ(degree1: number, degree2: number): void {
+        if (!initialized) {
+            initPCA9685()
+        }
+        setStepper(1, degree1 > 0);
+        setStepper(2, degree2 > 0);
+        degree1 = Math.abs(degree1);
+        degree2 = Math.abs(degree2);
+        basic.pause(10240 * Math.min(degree1, degree2) / 360);
+        if (degree1 > degree2) {
+            stopMotor(3); stopMotor(4);
+            basic.pause(10240 * (degree1 - degree2) / 360);
+        } else {
+            stopMotor(1); stopMotor(2);
+            basic.pause(10240 * (degree2 - degree1) / 360);
+        }
+
+        MotorStopAll()
+    }
+	
 
     /**
      * Stepper Car move forward
